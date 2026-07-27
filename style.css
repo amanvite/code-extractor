@@ -1,5 +1,4 @@
 :root {
-    /* IDE Dark Professional Palette */
     --bg-main: #1e1e1e;         
     --bg-sidebar: #252526;      
     --bg-topbar: #333333;       
@@ -290,9 +289,6 @@ body {
     cursor: not-allowed;
 }
 
-/* ========================================================
-   CRITICAL FIX: SEAMLESS EDITOR & LINE NUMBERS ALIGNMENT 
-   ======================================================== */
 .code-wrapper {
     flex-grow: 1;
     overflow: auto;
@@ -306,7 +302,6 @@ body {
 pre.line-numbers {
     position: relative !important; 
     margin: 0 !important;
-    /* Gutter is 2.5rem wide. Padding is 3.5rem. This guarantees a clean 1rem gap! */
     padding: 1.5rem 1.5rem 1.5rem 3.5rem !important; 
     background: transparent !important;
     flex-grow: 1;
@@ -327,7 +322,7 @@ code[class*="language-"] {
     top: 0 !important;
     left: 0 !important;
     bottom: 0 !important;
-    width: 2.5rem !important; /* Slightly thinner gutter to push numbers left */
+    width: 2.5rem !important; 
     padding: 1.5rem 0 !important;
     border-right: 1px solid var(--border) !important;
     background-color: var(--bg-sidebar) !important;
@@ -342,7 +337,7 @@ code[class*="language-"] {
     content: counter(linenumber);
     color: #858585 !important;
     display: block !important;
-    padding-right: 0.5rem !important; /* Distance between numbers and the border */
+    padding-right: 0.5rem !important; 
     text-align: right !important;
     font-family: var(--font-code) !important;
     font-size: 0.875rem !important;
@@ -380,7 +375,7 @@ code[class*="language-"] {
     max-height: 100%;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
-
+ 
 .search-bar {
     position: absolute;
     top: 10px;
