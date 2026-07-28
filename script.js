@@ -1,5 +1,3 @@
-const landingView = document.getElementById('landingView');
-const appWorkspace = document.getElementById('appWorkspace');
 const landingUrlInput = document.getElementById('landingUrlInput');
 const landingFetchBtn = document.getElementById('landingFetchBtn');
 
@@ -19,11 +17,29 @@ function formatUrl(url) {
 }
 
 async function fetchViaProxy(targetUrl) {
-    // Swapped codetabs for corsproxy.io
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
-    const response = await fetch(proxyUrl);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return await response.text();
+    // Array of different free CORS proxies
+    const proxies = [
+        `https://api.allorigins.win/raw?url=`,
+        `https://corsproxy.io/?`,
+        `https://api.codetabs.com/v1/proxy?quest=`
+    ];
+    
+    // Try each proxy one by one
+    for (let i = 0; i < proxies.length; i++) {
+        try {
+            const proxyUrl = proxies[i] + encodeURIComponent(targetUrl);
+            const response = await fetch(proxyUrl);
+            
+            if (response.ok) {
+                return await response.text(); // Success!
+            }
+        } catch (e) {
+            console.warn(`Proxy ${i + 1} failed, trying the next one...`);
+        }
+    }
+    
+    // If all 3 fail, throw the error
+    throw new Error("Target site blocked all proxies.");
 }
 
 function resolveUrl(baseUrl, relativeUrl) {
@@ -40,9 +56,6 @@ async function startExtraction(rawUrl) {
 
     extractedFiles = {};
     fileTree.innerHTML = `<div class="empty-state">Extracting Code & Media...</div>`;
-    
-    landingView.classList.add('hidden');
-    appWorkspace.classList.remove('hidden');
     
     try {
         const htmlContent = await fetchViaProxy(baseUrl);
@@ -104,8 +117,13 @@ async function startExtraction(rawUrl) {
         renderFileTree();
         selectFile('index.html');
 
-    } catch (error) {
-        fileTree.innerHTML = '<div class="empty-state">Extraction failed. Anti-bot protection blocked the proxy.</div>';
+} catch (error) {
+        // Show the error in red
+        fileTree.innerHTML = '<div class="empty-state" style="color: #ef4444;">Extraction failed. Site security blocked the proxies.</div>';
+        
+        // Clear the old ghost code from the editor
+        outputArea.textContent = ''; 
+        viewCode.classList.add('hidden');
     } finally {
         landingFetchBtn.disabled = false;
         landingFetchBtn.innerText = "Extract Site";

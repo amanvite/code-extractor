@@ -39,7 +39,7 @@ body {
     display: none !important;
 }
 
-/* --- LANDING PAGE --- */
+/* --- APP LAYOUT --- */
 .app-wrapper {
     display: flex;
     flex-direction: column;
@@ -47,50 +47,74 @@ body {
     width: 100vw;
 }
 
-.landing-container {
+/* --- TOP BAR --- */
+.top-bar {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
-    width: 100vw;
-    background-color: var(--bg-main);
-    background-image: radial-gradient(#3e3e42 1px, transparent 0);
-    background-size: 30px 30px;
-    padding: 2rem;
-    text-align: center;
+    justify-content: space-between;
+    padding: 8px 24px;
+    background-color: var(--bg-topbar);
+    border-bottom: 1px solid var(--border);
+    height: 55px;
+    flex-shrink: 0;
 }
 
-.landing-title {
-    font-size: 3.5rem;
+.header-info h1 {
+    font-size: 14px;
+    font-weight: 600;
     color: var(--text-bright);
-    margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    letter-spacing: -0.02em;
+    gap: 8px;
 }
 
-.landing-subtitle {
-    color: var(--text-muted);
-    font-size: 1.2rem;
-    margin-bottom: 3rem;
-    max-width: 500px;
+.badge {
+    background-color: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+}
+
+/* --- NEW URL EXTRACTION BAR --- */
+/* --- NEW URL EXTRACTION BAR (PRO POLISH) --- */
+.url-bar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Keeping your spacious padding, balanced slightly for visual weight */
+    padding: 30px 25px 45px; 
+    /* A subtle gradient gives the large space premium depth */
+    background: linear-gradient(to bottom, var(--bg-sidebar) 0%, var(--bg-main) 100%);
+    border-bottom: 1px solid var(--border);
+    /* Casts a soft shadow over the code editor below it */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
 }
 
 .landing-input-group {
-    flex-grow: 0;
     width: 100%;
-    max-width: 650px;
-    height: 64px;
-    background-color: #2d2d30;
+    max-width: 750px;
+    height: 48px; /* Slightly taller for a premium feel */
+    background-color: #151515; /* Darker inset color */
     border: 1px solid #3e3e42;
-    border-radius: 32px;
-    padding: 0 8px 0 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    border-radius: 24px;
+    padding: 0 6px 0 20px;
     display: flex;
     align-items: center;
+    /* Inner shadow makes the search bar look carved in */
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+}
+
+/* PRO FEATURE: Glows blue when you click inside the text box */
+.landing-input-group:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(14, 99, 156, 0.25), inset 0 2px 6px rgba(0,0,0,0.15);
+    background-color: #1a1a1c;
 }
 
 .landing-input-group input {
@@ -99,65 +123,44 @@ body {
     border: none;
     outline: none;
     color: var(--text-bright);
-    font-size: 1.1rem;
-    padding: 0.5rem 1rem;
+    font-size: 15px;
+    padding: 0 16px;
 }
 
-.landing-input-group input::placeholder {
-    color: var(--text-muted);
+.landing-input-group input::placeholder { color: var(--text-muted); }
+.input-icon { color: var(--text-muted); transition: color 0.2s; }
+
+/* Makes the link icon light up blue when typing */
+.landing-input-group:focus-within .input-icon {
+    color: var(--accent);
 }
 
 .landing-input-group button {
-    font-size: 1rem;
-    min-width: 130px;
-    height: 48px;
-    border-radius: 24px;
+    font-size: 14px;
+    min-width: 120px;
+    height: 36px;
+    border-radius: 18px;
     font-weight: 600;
-    letter-spacing: 0.02em;
     background-color: var(--accent);
     color: #fff;
     border: none;
     cursor: pointer;
-    transition: background-color 0.15s ease;
+    transition: all 0.2s ease;
+    /* Button shadow for depth */
+    box-shadow: 0 4px 10px rgba(14, 99, 156, 0.3);
 }
 
 .landing-input-group button:hover {
     background-color: var(--accent-hover);
+    transform: translateY(-1px); /* Slight lift effect when hovered */
+    box-shadow: 0 6px 12px rgba(14, 99, 156, 0.4);
 }
 
 .landing-input-group button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-}
-
-/* --- TOP BAR --- */
-.top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 1.5rem;
-    background-color: var(--bg-topbar);
-    border-bottom: 1px solid var(--border);
-    height: 55px;
-    flex-shrink: 0;
-}
-
-.header-info h1 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-bright);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.badge {
-    background-color: var(--accent);
-    color: #fff;
-    font-size: 0.6rem;
-    padding: 0.1rem 0.3rem;
-    border-radius: 3px;
-    letter-spacing: 0.05em;
+    transform: none;
+    box-shadow: none;
 }
 
 /* --- WORKSPACE & SIDEBAR --- */
@@ -177,10 +180,10 @@ body {
 }
 
 .sidebar-header {
-    font-size: 0.7rem;
+    font-size: 11px;
     font-weight: 600;
     color: var(--text-muted);
-    padding: 1rem 1.2rem 0.5rem;
+    padding: 16px 19px 8px;
     letter-spacing: 0.05em;
     display: flex;
     justify-content: space-between;
@@ -190,30 +193,35 @@ body {
 .file-tree {
     flex-grow: 1;
     overflow-y: auto;
-    padding: 0.5rem 0;
+    padding: 8px 0;
 }
 
+/* Upgraded User-Friendly File Bubbles */
 .file-item {
-    padding: 0.3rem 1.2rem;
-    font-size: 0.85rem;
+    margin: 4px 10px; 
+    padding: 8px 12px;
+    border-radius: 6px; 
+    font-size: 13px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: var(--text-main);
-    transition: background-color 0.1s ease;
+    gap: 10px;
+    color: var(--text-muted); 
+    transition: all 0.15s ease;
     user-select: none;
 }
 
 .file-item:hover {
     background-color: var(--bg-hover);
+    color: var(--text-bright);
 }
 
 .file-item.active {
-    background-color: var(--bg-active);
-    color: var(--text-bright);
-    border-left: 2px solid var(--accent);
-    padding-left: calc(1.2rem - 2px);
+    background-color: var(--accent); 
+    color: #ffffff; 
+    border-left: none; 
+    padding-left: 12px;
+    box-shadow: 0 4px 12px rgba(14, 99, 156, 0.2); 
 }
 
 .file-icon {
@@ -226,10 +234,11 @@ body {
 .icon-css { color: #264de4; }
 .icon-js { color: #f0db4f; }
 .icon-img { color: #10b981; }
+.file-item.active .file-icon { color: #ffffff !important; }
 
 .empty-state {
-    padding: 2rem 1rem;
-    font-size: 0.85rem;
+    padding: 32px 16px;
+    font-size: 13px;
     color: var(--text-muted);
     text-align: center;
 }
@@ -249,27 +258,15 @@ body {
     justify-content: space-between;
     align-items: center;
     background-color: var(--bg-sidebar);
-    padding-right: 1rem;
-}
-
-.tab {
-    padding: 0.5rem 1.5rem;
-    background-color: var(--bg-main);
-    color: var(--text-bright);
-    font-family: var(--font-ui);
-    font-size: 0.85rem;
-    border-top: 1px solid var(--accent);
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    padding-right: 16px;
 }
 
 .action-btn {
     background-color: transparent;
     color: var(--text-muted);
     border: 1px solid var(--border);
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
+    padding: 4px 8px;
+    font-size: 12px;
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -289,8 +286,6 @@ body {
     cursor: not-allowed;
 }
 
-/* --- EDITOR PANE --- */
-/* --- EDITOR PANE --- */
 .code-wrapper {
     flex-grow: 1;
     overflow: auto;
@@ -301,12 +296,11 @@ body {
     padding: 0 !important;
 }
 
-/* Outmuscle Prism.js defaults */
-pre[class*="language-"].line-numbers {
+/* 1. SIMPLIFIED SELECTOR: Removed [class*="language-"] so it never vanishes */
+pre.line-numbers {
     position: relative !important; 
     margin: 0 !important;
-    /* 0 top padding. 56px left padding to stop text overlap */
-    padding: 0px 0px 0px !important; 
+    padding: 0 !important; /* Forces the box flush to the edges */
     background: transparent !important;
     flex-grow: 1;
     border: none !important;
@@ -314,6 +308,7 @@ pre[class*="language-"].line-numbers {
     border-radius: 0 !important;
 }
 
+/* 2. Gap and Breathing Room applied strictly to the text */
 code[class*="language-"] {
     background: transparent !important;
     text-shadow: none !important;
@@ -321,19 +316,18 @@ code[class*="language-"] {
     font-size: 14px !important;
     line-height: 1.6 !important;
     display: block !important; 
-
-    /* Pushes the text to the right to create a gap */
-    padding-left: 60px !important;
+    /* 20px top/bottom breathing room, 60px left for the gap */
+    padding: 20px 0px 20px 60px !important; 
 }
 
-/* Force the line number column into the corner */
-pre[class*="language-"].line-numbers .line-numbers-rows {
+/* 3. The Serial Numbers Column */
+pre.line-numbers .line-numbers-rows {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
     bottom: 0 !important;
     width: 45px !important; 
-    padding: 0 !important; 
+    padding: 20px 0px 0px 0px !important; 
     margin: 0 !important;
     border-right: 1px solid var(--border) !important;
     background-color: var(--bg-sidebar) !important;
@@ -377,7 +371,7 @@ pre[class*="language-"].line-numbers .line-numbers-rows {
     background-color: #1e1e1e;
     background-image: radial-gradient(#3e3e42 1px, transparent 0);
     background-size: 20px 20px;
-    padding: 2rem;
+    padding: 32px;
     overflow: auto;
 }
 
@@ -407,7 +401,7 @@ pre[class*="language-"].line-numbers .line-numbers-rows {
     color: var(--text-bright);
     outline: none;
     padding: 4px;
-    font-size: 0.85rem;
+    font-size: 13px;
     font-family: var(--font-ui);
 }
 
@@ -416,30 +410,31 @@ pre[class*="language-"].line-numbers .line-numbers-rows {
     border: none;
     color: var(--text-muted);
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 13px;
 }
 
 .icon-btn:hover {
     color: var(--text-bright);
 }
 
+/* Sleek Scrollbars */
 ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-sidebar);
+    background: transparent; 
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #424242;
-    border: 3px solid var(--bg-sidebar);
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1); 
+    border-radius: 10px; 
+    border: 2px solid var(--bg-main); 
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #4f4f4f;
+    background: rgba(255, 255, 255, 0.2); 
 }
 
 .loader {
