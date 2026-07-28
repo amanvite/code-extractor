@@ -17,29 +17,30 @@ function formatUrl(url) {
 }
 
 async function fetchViaProxy(targetUrl) {
-    // Array of different free CORS proxies
-    const proxies = [
-        `https://api.allorigins.win/raw?url=`,
-        `https://corsproxy.io/?`,
-        `https://api.codetabs.com/v1/proxy?quest=`
+    const encodedUrl = encodeURIComponent(targetUrl);
+    
+    // Create a kill switch that triggers after 8 seconds
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); 
+
+    const requests = [
+        fetch(`https://api.allorigins.win/raw?url=${encodedUrl}`, { signal: controller.signal })
+            .then(res => { if (!res.ok) throw new Error(); return res.text(); }),
+        fetch(`https://api.codetabs.com/v1/proxy?quest=${encodedUrl}`, { signal: controller.signal })
+            .then(res => { if (!res.ok) throw new Error(); return res.text(); }),
+        fetch(`https://corsproxy.io/?${encodedUrl}`, { signal: controller.signal })
+            .then(res => { if (!res.ok) throw new Error(); return res.text(); })
     ];
-    
-    // Try each proxy one by one
-    for (let i = 0; i < proxies.length; i++) {
-        try {
-            const proxyUrl = proxies[i] + encodeURIComponent(targetUrl);
-            const response = await fetch(proxyUrl);
-            
-            if (response.ok) {
-                return await response.text(); // Success!
-            }
-        } catch (e) {
-            console.warn(`Proxy ${i + 1} failed, trying the next one...`);
-        }
+
+    try {
+        // Run them all. Fastest one wins!
+        const result = await Promise.any(requests);
+        clearTimeout(timeoutId); // Cancel the kill switch if we succeed
+        return result;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        throw new Error("Proxies were blocked or timed out.");
     }
-    
-    // If all 3 fail, throw the error
-    throw new Error("Target site blocked all proxies.");
 }
 
 function resolveUrl(baseUrl, relativeUrl) {
