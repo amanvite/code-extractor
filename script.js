@@ -19,7 +19,8 @@ function formatUrl(url) {
 }
 
 async function fetchViaProxy(targetUrl) {
-    const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`;
+    // Swapped codetabs for corsproxy.io
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
     const response = await fetch(proxyUrl);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return await response.text();
@@ -76,6 +77,19 @@ async function startExtraction(rawUrl) {
             }
         }
 
+        // Extract Web Manifests / JSON files
+        const linkTags = Array.from(doc.querySelectorAll('link[rel="manifest"], link[rel="alternate"][type="application/json"]')).map(l => l.getAttribute('href')).filter(h => h);
+        for (let href of linkTags) {
+            const fullUrl = resolveUrl(baseUrl, href);
+            if (fullUrl) {
+                try {
+                    const jsonContent = await fetchViaProxy(fullUrl);
+                    let fileName = fullUrl.split('/').pop().split('?')[0] || 'manifest.json';
+                    extractedFiles[fileName] = { category: 'JSON/Config', content: jsonContent, type: 'code' };
+                } catch (e) {}
+            }
+        }
+
         const imgTags = Array.from(doc.querySelectorAll('img')).map(img => img.getAttribute('src')).filter(src => src);
         for (let src of imgTags) {
             const fullUrl = resolveUrl(baseUrl, src);
@@ -107,7 +121,8 @@ const icons = {
     html: `<svg class="file-icon icon-html" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l1.5 13.5L12 21l6.5-3.5L20 4H4zm11 5H8.5l-.3-3H17l-1 8h-3v-3h3l.4-2z"></path></svg>`,
     css: `<svg class="file-icon icon-css" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l1.5 13.5L12 21l6.5-3.5L20 4H4zm11 5H8.5l-.3-3H17l-1 8h-3v-3h3l.4-2z"></path></svg>`,
     js: `<svg class="file-icon icon-js" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l1.5 13.5L12 21l6.5-3.5L20 4H4zm11 5H8.5l-.3-3H17l-1 8h-3v-3h3l.4-2z"></path></svg>`,
-    img: `<svg class="file-icon icon-img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`
+    img: `<svg class="file-icon icon-img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`,
+    generic: `<svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="#969696" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`
 };
 
 function renderFileTree() {
@@ -119,17 +134,17 @@ function renderFileTree() {
         return;
     }
 
-    // Flat list rendering (no folders)
     files.forEach(fileName => {
         const fileData = extractedFiles[fileName];
         const fileEl = document.createElement('div');
         fileEl.className = 'file-item';
         fileEl.dataset.filename = fileName;
 
-        let icon = icons.html;
-        if (fileData.category === 'CSS') icon = icons.css;
-        if (fileData.category === 'JavaScript') icon = icons.js;
-        if (fileData.category === 'Images') icon = icons.img;
+        let icon = icons.generic; 
+        if (fileName.endsWith('.html')) icon = icons.html;
+        else if (fileData.category === 'CSS') icon = icons.css;
+        else if (fileData.category === 'JavaScript') icon = icons.js;
+        else if (fileData.category === 'Images') icon = icons.img;
 
         fileEl.innerHTML = `${icon} <span>${fileName}</span>`;
         fileEl.addEventListener('click', () => selectFile(fileName));
@@ -166,9 +181,23 @@ function selectFile(fileName) {
         viewCode.classList.remove('hidden');
         
         outputArea.textContent = fileData.content;
-        let lang = 'markup'; 
-        if (fileName.endsWith('.css')) lang = 'css';
-        if (fileName.endsWith('.js')) lang = 'javascript';
+        
+        let lang = 'none'; 
+        const ext = fileName.split('.').pop().toLowerCase();
+        
+        const languageMap = {
+            'html': 'markup', 'xml': 'markup', 'svg': 'markup',
+            'css': 'css',
+            'js': 'javascript', 'jsx': 'jsx',
+            'ts': 'typescript', 'tsx': 'tsx',
+            'json': 'json',
+            'py': 'python',
+            'php': 'php'
+        };
+
+        if (languageMap[ext]) {
+            lang = languageMap[ext];
+        }
         
         outputArea.className = `language-${lang}`;
         Prism.highlightElement(outputArea); 
