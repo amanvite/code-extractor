@@ -61,7 +61,7 @@ export default function App() {
                         autoComplete="off"
                     />
                     <button type="submit" className="action-btn" disabled={isLoading}>
-                        {isLoading ? 'Extracting...' : 'Extract Payload'}
+                        {isLoading ? 'Extracting...' : 'Extract'}
                     </button>
                 </form>
 

@@ -63,7 +63,7 @@ app.post('/api/extract', async (req: Request, res: Response): Promise<void> => {
             }
         });
 
-        await page.goto(targetUrl, { waitUntil: 'networkidle', timeout: 35000 });
+        await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 75000 });
 
         const renderedHtml = await page.content();
         const $ = cheerio.load(renderedHtml);
