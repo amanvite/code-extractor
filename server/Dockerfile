@@ -3,17 +3,17 @@ FROM mcr.microsoft.com/playwright:v1.40.0-jammy
 
 WORKDIR /app
 
-# 1. Copy ONLY the strict essential files (Bypassing .dockerignore completely)
+# Copy the exact essential files
 COPY package*.json ./
 COPY tsconfig.json ./
 COPY src/ ./src/
 
-# 2. Install fresh Linux dependencies
+# Install standard dependencies, plus tsx to run the code directly
 RUN npm install
+RUN npm install -g tsx
 
-# 3. Build the project natively in the container
-RUN npx tsc
-
-# 4. Expose port and start
+# Expose the API port
 EXPOSE 3001
-CMD ["npm", "start"]
+
+# Execute the TypeScript file directly, bypassing the build step
+CMD ["tsx", "src/index.ts"]
