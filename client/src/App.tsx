@@ -7,7 +7,12 @@ import './index.css';
 
 export default function App() {
     const [urlInput, setUrlInput] = useState('');
-    const { assets, activeFile, isLoading, error, extractSite, setActiveFile } = useExtractionStore();
+    // 1. Added formatActiveFile to the destructured store
+    const { assets, activeFile, isLoading, error, extractSite, setActiveFile, formatActiveFile } = useExtractionStore();
+
+    // Moved this up so the header buttons can use it to check if the file is binary
+    const currentAsset = activeFile ? assets[activeFile] : null;
+    const fileCount = Object.keys(assets).length;
 
     const handleExtract = (e: React.FormEvent) => {
         e.preventDefault();
@@ -30,9 +35,6 @@ export default function App() {
         link.download = `extraction-${Date.now()}.zip`;
         link.click();
     };
-
-    const currentAsset = activeFile ? assets[activeFile] : null;
-    const fileCount = Object.keys(assets).length;
 
     const getLanguage = (filename: string) => {
         if (filename.endsWith('.js')) return 'javascript';
@@ -65,10 +67,18 @@ export default function App() {
                     </button>
                 </form>
 
-                <button onClick={handleDownload} disabled={fileCount === 0} className="action-btn" style={{background: 'transparent', color: '#171717', border: '1px solid #e5e5e5'}}>
-                    <Download size={14} style={{display: 'inline', marginRight: '6px', verticalAlign: 'text-bottom'}} />
-                    Export ZIP
-                </button>
+                {/* 2. Grouped the action buttons together and added the Format Code button */}
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    {currentAsset && !currentAsset.isBinary && (
+                        <button onClick={formatActiveFile} className="action-btn" style={{background: '#f3f4f6', color: '#171717', border: '1px solid #e5e5e5'}}>
+                            Format Code
+                        </button>
+                    )}
+                    <button onClick={handleDownload} disabled={fileCount === 0} className="action-btn" style={{background: 'transparent', color: '#171717', border: '1px solid #e5e5e5'}}>
+                        <Download size={14} style={{display: 'inline', marginRight: '6px', verticalAlign: 'text-bottom'}} />
+                        Export ZIP
+                    </button>
+                </div>
             </header>
 
             <div className="main-stage">

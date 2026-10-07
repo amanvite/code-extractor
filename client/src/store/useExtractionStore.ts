@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { html, css, js } from 'js-beautify';
 
 export interface ExtractedAsset {
   category: 'HTML' | 'CSS' | 'Javascript' | 'Images';
@@ -14,6 +15,7 @@ interface ExtractionState {
   error: string | null;
   setActiveFile: (filename: string) => void;
   extractSite: (url: string) => Promise<void>;
+  formatActiveFile: () => void;
 }
 
 export const useExtractionStore = create<ExtractionState>((set) => ({
@@ -28,7 +30,6 @@ export const useExtractionStore = create<ExtractionState>((set) => ({
     set({ isLoading: true, error: null, assets: {}, activeFile: null });
     
     try {
-      // MUST UPDATE: Replace YOUR-RENDER-APP-NAME with your live Render backend URL
       const response = await fetch('https://code-extractor-99iu.onrender.com/api/extract', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -45,5 +46,33 @@ export const useExtractionStore = create<ExtractionState>((set) => ({
     } catch (err: any) {
       set({ error: err.message, isLoading: false });
     }
+  },
+
+  formatActiveFile: () => {
+    set((state) => {
+      if (!state.activeFile || !state.assets[state.activeFile]) return state;
+
+      const asset = state.assets[state.activeFile];
+      let formatted = asset.content;
+
+      try {
+        if (asset.category === 'HTML') {
+          formatted = html(asset.content, { indent_size: 2, max_preserve_newlines: 1 });
+        } else if (asset.category === 'CSS') {
+          formatted = css(asset.content, { indent_size: 2 });
+        } else if (asset.category === 'Javascript') {
+          formatted = js(asset.content, { indent_size: 2 });
+        }
+      } catch (error) {
+        console.error('Formatting failed:', error);
+      }
+
+      return {
+        assets: {
+          ...state.assets,
+          [state.activeFile]: { ...asset, content: formatted }
+        }
+      };
+    });
   }
 }));
