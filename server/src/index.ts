@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { type Request, type Response } from 'express';
 import cors from 'cors';
 import { chromium } from 'playwright-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
@@ -37,7 +37,7 @@ app.post('/api/extract', async (req: Request, res: Response): Promise<void> => {
         
         const page = await context.newPage();
 
-        page.on('response', async (response) => {
+        page.on('response', async (response: any) => {
             try {
                 const resUrl = response.url();
                 if (resUrl.startsWith('data:') || response.status() >= 400) return;

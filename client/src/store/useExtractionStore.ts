@@ -25,7 +25,7 @@ export const useExtractionStore = create<ExtractionState>((set) => ({
     extractSite: async (url) => {
         set({ isLoading: true, error: null, assets: {}, activeFile: null });
         try {
-            const response = await fetch('http://localhost:3001/api/extract', {
+            const response = await fetch('https://your-api.up.render.app/api/extract', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url }),
