@@ -29,7 +29,7 @@ export const useExtractionStore = create<ExtractionState>((set) => ({
     
     try {
       // MUST UPDATE: Replace YOUR-RENDER-APP-NAME with your live Render backend URL
-      const response = await fetch('https://YOUR-RENDER-APP-NAME.onrender.com/api/extract', {
+      const response = await fetch('https://code-extractor-99iu.onrender.com/api/extract', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),
