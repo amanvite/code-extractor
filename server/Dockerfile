@@ -1,18 +1,19 @@
-# Use the official Playwright image containing Node.js and Chromium
+# Use the official Playwright image
 FROM mcr.microsoft.com/playwright:v1.40.0-jammy
 
 WORKDIR /app
 
-# Install standard dependencies
+# 1. Copy ONLY the strict essential files (Bypassing .dockerignore completely)
 COPY package*.json ./
+COPY tsconfig.json ./
+COPY src/ ./src/
+
+# 2. Install fresh Linux dependencies
 RUN npm install
 
-# Copy source code and build
-COPY . .
+# 3. Build the project natively in the container
 RUN npx tsc
 
-# Expose the API port
+# 4. Expose port and start
 EXPOSE 3001
-
-# Start the server
 CMD ["npm", "start"]
