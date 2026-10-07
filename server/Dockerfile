@@ -9,7 +9,7 @@ RUN npm install
 
 # Copy source code and build
 COPY . .
-RUN npm run build
+RUN npx tsc
 
 # Expose the API port
 EXPOSE 3001
