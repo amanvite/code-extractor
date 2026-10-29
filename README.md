@@ -1,18 +1,22 @@
 # Code Extractor
 
-A stealth full-stack utility to extract, view, and bundle rendered source code from dynamic websites.
+A full-stack web extraction tool for retrieving and formatting dynamic DOM assets.
 
-## Tech Stack
-* **Frontend:** React, Vite, Zustand, Monaco Editor
-* **Backend:** Node.js, Express, Playwright (Stealth)
+**[Launch Live Application](https://code-extractor-plus.vercel.app)**  
 
-## Quick Start
+## Core Capabilities
+* **Dynamic DOM Extraction:** Utilizes a headless Playwright engine to bypass modern network trackers and extract fully rendered, DOM-ready code.
+* **In-Browser Formatting:** Natively structures and indents heavily minified HTML, CSS, and JS payloads using the `js-beautify` engine.
+* **Asset Bundling:** Compresses extracted text and binary media on the fly into a downloadable `.zip` archive.
+* **Integrated Development Environment:** Provides a VS Code-like viewing experience directly in the browser via Monaco Editor.
 
-Run the backend and frontend in separate terminals:
+## Technical Architecture
+* **Frontend (Deployed on Vercel):** React, Vite, Zustand, Monaco Editor
+* **Backend (Deployed on Render):** Node.js, Express, Playwright, Docker, TSX
 
-```bash
-# Terminal 1: Start Server (Port 3001)
-cd server && npm install && npm run dev
+## License & Usage Restrictions
+**Proprietary – All Rights Reserved.**  
+This repository is provided strictly for portfolio demonstration. While you are welcome to interact with the live deployed application, downloading, copying, modifying, or utilizing this source code for any personal, educational, or commercial purpose is strictly prohibited. See the [LICENSE](LICENSE) file for complete legal terms.
 
-# Terminal 2: Start Client (Port 5173)
-cd client && npm install && npm run dev
+---
+*Engineered by Aman Verma* | [info.amanvite@gmail.com](mailto:info.amanvite@gmail.com)
