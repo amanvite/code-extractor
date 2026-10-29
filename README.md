@@ -11,8 +11,8 @@ A full-stack web extraction tool for retrieving and formatting dynamic DOM asset
 * **Integrated Development Environment:** Provides a VS Code-like viewing experience directly in the browser via Monaco Editor.
 
 ## Technical Architecture
-* **Frontend (Deployed on Vercel):** React, Vite, Zustand, Monaco Editor
-* **Backend (Deployed on Render):** Node.js, Express, Playwright, Docker, TSX
+* **Frontend:** React, Vite, Zustand, Monaco Editor
+* **Backend:** Node.js, Express, Playwright, Docker, TSX
 
 ## License & Usage Restrictions
 **Proprietary – All Rights Reserved.**  
