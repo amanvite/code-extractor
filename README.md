@@ -1,8 +1,7 @@
 # Code Extractor
 
-A full-stack web extraction tool for retrieving and formatting dynamic DOM assets.
+A powerful full-stack web extraction platform designed to capture, inspect, and transform JavaScript-rendered DOM structures and dynamic webpage assets into clean, structured, developer-ready output.
 
-**[Launch Live Application](https://code-extractor-plus.vercel.app)**  
 
 ## Technical Architecture
 * **Frontend:** React, Vite, Zustand, Monaco Editor
@@ -13,5 +12,3 @@ A full-stack web extraction tool for retrieving and formatting dynamic DOM asset
 
 See the [LICENSE](LICENSE) file for complete legal terms.
 
----
-*Engineered by Aman Verma* | [info.amanvite@gmail.com](mailto:info.amanvite@gmail.com)
